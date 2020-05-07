@@ -26,6 +26,7 @@ const chameleonReducer = (state = initialState, action) => {
 
     case "set_topics": {
         let newState = _.cloneDeep(state)
+        console.log(action.payload)
         newState.topics = action.payload;
         newState.db_updated = true;
         return newState;

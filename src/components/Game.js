@@ -13,6 +13,7 @@ import Table from "react-bootstrap/Table";
 
 function titleCase(string) {
     if (string === "") return "";
+    console.log(string);
     let sentence = string.toLowerCase().split(" ");
     for(let i = 0; i< sentence.length; i++){
         sentence[i] = sentence[i][0].toUpperCase() + sentence[i].slice(1);

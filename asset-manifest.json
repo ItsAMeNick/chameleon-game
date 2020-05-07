@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.js": "/chameleon-game/static/js/main.0e2cf06f.chunk.js",
-    "main.js.map": "/chameleon-game/static/js/main.0e2cf06f.chunk.js.map",
+    "main.js": "/chameleon-game/static/js/main.4b65ca64.chunk.js",
+    "main.js.map": "/chameleon-game/static/js/main.4b65ca64.chunk.js.map",
     "runtime-main.js": "/chameleon-game/static/js/runtime-main.2c69b896.js",
     "runtime-main.js.map": "/chameleon-game/static/js/runtime-main.2c69b896.js.map",
     "static/css/2.69121389.chunk.css": "/chameleon-game/static/css/2.69121389.chunk.css",
     "static/js/2.1531303d.chunk.js": "/chameleon-game/static/js/2.1531303d.chunk.js",
     "static/js/2.1531303d.chunk.js.map": "/chameleon-game/static/js/2.1531303d.chunk.js.map",
     "index.html": "/chameleon-game/index.html",
-    "precache-manifest.9fd15d214ee2bac029a4f64c835440b9.js": "/chameleon-game/precache-manifest.9fd15d214ee2bac029a4f64c835440b9.js",
+    "precache-manifest.132141fe57f420dc19d29f20c99b702b.js": "/chameleon-game/precache-manifest.132141fe57f420dc19d29f20c99b702b.js",
     "service-worker.js": "/chameleon-game/service-worker.js",
     "static/css/2.69121389.chunk.css.map": "/chameleon-game/static/css/2.69121389.chunk.css.map",
     "static/js/2.1531303d.chunk.js.LICENSE.txt": "/chameleon-game/static/js/2.1531303d.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.2c69b896.js",
     "static/css/2.69121389.chunk.css",
     "static/js/2.1531303d.chunk.js",
-    "static/js/main.0e2cf06f.chunk.js"
+    "static/js/main.4b65ca64.chunk.js"
   ]
 }

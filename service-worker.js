@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/chameleon-game/precache-manifest.6d42b343756d6e7782fef091dd4bf9f3.js"
+  "/chameleon-game/precache-manifest.06b8e20e2f2000cfcaa7df47d30f7056.js"
 );
 
 self.addEventListener('message', (event) => {

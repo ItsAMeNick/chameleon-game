@@ -15,27 +15,39 @@ class LoadTopics extends Component {
 
     componentDidMount() {
         let today = new Date()
-        cookie.remove("db_update");
-        if (cookie.load("db_update") === today.toISOString().split("T")[0]) {
-            console.log("Cached Topics")
+        //You cant store all of the topics in the cookies so you have to load them every time :(
+        // if (cookie.load("db_update") === today.toISOString().split("T")[0]) {
+        //     console.log("Cached Topics")
+        //     this.setState({loaded: 100})
+        //     cookie.save("db_update", today.toISOString().split("T")[0], {path: "/"})
+        //     console.log(cookie.load("topics"))
+        //     this.props.setTopics(cookie.load("topics"))
+        // } else {
+        //     console.log("Getting Topics")
+        //     firestore.collection("topics").get().then(resp => {
+        //         let topics = {}
+        //         for (let topic in resp.docs) {
+        //             let data = resp.docs[topic].data()
+        //             topics[data.topic] = data.words
+        //         }
+        //         this.setState({loaded: 100})
+        //         cookie.save("db_update", today.toISOString().split("T")[0], {path: "/"})
+        //         cookie.save("topics", topics, {path: "/"});
+        //         this.props.setTopics(topics)
+        //     });
+        // }
+        console.log("Getting Topics")
+        firestore.collection("topics").get().then(resp => {
+            let topics = {}
+            for (let topic in resp.docs) {
+                let data = resp.docs[topic].data()
+                topics[data.topic] = data.words
+            }
             this.setState({loaded: 100})
             cookie.save("db_update", today.toISOString().split("T")[0], {path: "/"})
-            cookie.save("topics", cookie.load("topics"), {path: "/"});
-            this.props.setTopics(cookie.load("topics"))
-        } else {
-            console.log("Getting Topics")
-            firestore.collection("topics").get().then(resp => {
-                let topics = {}
-                for (let topic in resp.docs) {
-                    let data = resp.docs[topic].data()
-                    topics[data.topic] = data.words
-                }
-                this.setState({loaded: 100})
-                cookie.save("db_update", today.toISOString().split("T")[0], {path: "/"})
-                cookie.save("topics", topics, {path: "/"});
-                this.props.setTopics(topics)
-            });
-        }
+            cookie.save("topics", topics, {path: "/"});
+            this.props.setTopics(topics)
+        });
     }
 
     render() {

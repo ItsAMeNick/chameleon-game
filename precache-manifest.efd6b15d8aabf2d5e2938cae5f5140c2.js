@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "94da40522746bfb8b55ec543c43a8a99",
+    "revision": "581e6394a6717bd54a09e5b208032915",
     "url": "/chameleon-game/index.html"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/chameleon-game/static/js/2.1531303d.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "ba8f4d92d88724d0b9dd",
-    "url": "/chameleon-game/static/js/main.dec01b28.chunk.js"
+    "revision": "c27cd66caf6eb62c635e",
+    "url": "/chameleon-game/static/js/main.54f37927.chunk.js"
   },
   {
     "revision": "fc5e3d3308d8f8081604",

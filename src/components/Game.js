@@ -31,8 +31,6 @@ class Game extends Component {
         //Set up listener (May need to put this in a promise later)
         firestore.collection("sessions").doc(this.props.session.db_id)
             .onSnapshot({includeMetadataChanges: true}, (doc) => {
-                console.log(doc)
-                console.log(doc.exists)
                 if (doc.exists) {
                     this.props.updateGame(doc.data());
                 } else {
@@ -66,6 +64,8 @@ class Game extends Component {
                                 let topic = Object.keys(this.props.topics)[Math.floor(Math.random()*Object.keys(this.props.topics).length)];
                                 let word = this.props.topics[topic][Math.floor(Math.random()*this.props.topics[topic].length)];
                                 let new_chameleon = Math.floor(Math.random()*this.props.players.length);
+                                console.log(word)
+                                console.log(topic)
                                 firestore.collection("sessions").doc(this.props.session.db_id).update({
                                     stage: "hints",
                                     "round.topic": topic,

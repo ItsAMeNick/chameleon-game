@@ -56,6 +56,15 @@ class Join extends Component {
                 : null}
                 <Row>
                     <Col>
+                        <Form.Label> Session Key: </Form.Label>
+                    </Col>
+                    <Col>
+                        <Form.Control onChange={(e) => this.setState({session_key: e.target.value})}/>
+                    </Col>
+                </Row>
+                <br/>
+                <Row>
+                    <Col>
                         <Form.Label> Player Name: </Form.Label>
                     </Col>
                     <Col>
@@ -63,14 +72,6 @@ class Join extends Component {
                     </Col>
                 </Row>
                 <br/>
-                <Row>
-                    <Col>
-                        <Form.Label> Session Key: </Form.Label>
-                    </Col>
-                    <Col>
-                        <Form.Control onChange={(e) => this.setState({session_key: e.target.value})}/>
-                    </Col>
-                </Row>
                 <Row>
                     <Button onClick={() => this.joinGame()}>
                         Join Game

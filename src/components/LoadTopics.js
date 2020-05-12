@@ -36,7 +36,6 @@ class LoadTopics extends Component {
         //         this.props.setTopics(topics)
         //     });
         // }
-        console.log("Getting Topics")
         firestore.collection("topics").get().then(resp => {
             let topics = {}
             for (let topic in resp.docs) {

@@ -15,6 +15,10 @@ const initialState = {
         topic: "",
         role: ""
     },
+    voting: {
+        voters: [],
+        votes: [],
+    }
 };
 
 const chameleonReducer = (state = initialState, action) => {
@@ -25,35 +29,41 @@ const chameleonReducer = (state = initialState, action) => {
     }
 
     case "set_topics": {
-        let newState = _.cloneDeep(state)
-        console.log(action.payload)
+        let newState = _.cloneDeep(state);
         newState.topics = action.payload;
         newState.db_updated = true;
         return newState;
     }
 
     case "set_session": {
-        let newState = _.cloneDeep(state)
+        let newState = _.cloneDeep(state);
         newState.session = action.payload;
         return newState;
     }
 
     case "set_player": {
-        let newState = _.cloneDeep(state)
+        let newState = _.cloneDeep(state);
         newState.player_name = action.payload;
         return newState;
     }
 
     case "update_game": {
-        let newState = _.cloneDeep(state)
+        let newState = _.cloneDeep(state);
         newState.stage = action.payload.stage;
         newState.players = action.payload.players;
         newState.round.id = action.payload.round.id;
-        newState.round.topic = action.payload.round.topic
+        newState.round.topic = action.payload.round.topic;
         if (action.payload.players[action.payload.round.chameleon] === state.player_name) {
-            newState.round.role = ""
+            newState.round.role = "";
         } else {
-            newState.round.role = action.payload.round.word
+            newState.round.role = action.payload.round.word;
+        }
+        newState.voting.voters = [];
+        newState.voting.votes = [];
+        for (let v in action.payload.round.voting) {
+            let vote = action.payload.round.voting[v].split("|");
+            newState.voting.voters.push(vote[0])
+            newState.voting.votes.push(vote[1]);
         }
         return newState;
     }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import firestore from "../modules/firestore.js";
 import cookie from "react-cookies";
+import firebase from "firebase/app";
 
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
@@ -47,6 +48,12 @@ class Game extends Component {
                 return this.lobby();
             case "hints":
                 return <Row>{this.hints()}</Row>;
+            case "voting":
+                if (this.props.voting.voters.length === this.props.players.length) {
+                    return this.results();
+                } else {
+                    return this.voting();
+                }
             default:
                 return null
         }
@@ -64,13 +71,12 @@ class Game extends Component {
                                 let topic = Object.keys(this.props.topics)[Math.floor(Math.random()*Object.keys(this.props.topics).length)];
                                 let word = this.props.topics[topic][Math.floor(Math.random()*this.props.topics[topic].length)];
                                 let new_chameleon = Math.floor(Math.random()*this.props.players.length);
-                                console.log(word)
-                                console.log(topic)
                                 firestore.collection("sessions").doc(this.props.session.db_id).update({
                                     stage: "hints",
                                     "round.topic": topic,
                                     "round.word": word,
-                                    "round.chameleon": new_chameleon
+                                    "round.chameleon": new_chameleon,
+                                    "round.voting": []
                                 })
                             }}>Start Game</Button>
                         </Col>
@@ -95,14 +101,40 @@ class Game extends Component {
                         <Col>
                             <Button onClick={() => {
                                 //Next Round
+                                firestore.collection("sessions").doc(this.props.session.db_id).update({
+                                    stage: "voting"
+                                })
+                            }}>To Voting</Button>
+                        </Col>
+                        <Col>
+                            <Button onClick={() => {
+                                firestore.collection("sessions").doc(this.props.session.db_id).update({
+                                    stage: "lobby",
+                                })
+                            }}>
+                                Return to Lobby
+                            </Button>
+                        </Col>
+                    </Row>)
+                }
+                break;
+            case "voting":
+                if (this.props.players[0] === this.props.player_name) {
+                    //HOST ONLY
+                    return (<Row>
+                        <Col>
+                            <Button onClick={() => {
+                                //Next Round
                                 let topic = Object.keys(this.props.topics)[Math.floor(Math.random()*Object.keys(this.props.topics).length)];
                                 let word = this.props.topics[topic][Math.floor(Math.random()*this.props.topics[topic].length)];
                                 let new_chameleon = Math.floor(Math.random()*this.props.players.length);
                                 firestore.collection("sessions").doc(this.props.session.db_id).update({
+                                    stage: "hints",
                                     "round.id": this.props.round+1,
                                     "round.topic": topic,
                                     "round.word": word,
-                                    "round.chameleon": new_chameleon
+                                    "round.chameleon": new_chameleon,
+                                    "round.voting": []
                                 })
                             }}>Next Round</Button>
                         </Col>
@@ -124,25 +156,28 @@ class Game extends Component {
     }
 
     lobby() {
-        let lobby = []
+        let lobby = [];
         lobby.push(<Alert variant="info" key="code">{"Room Code: "+this.props.session.key}</Alert>)
         for (let p in this.props.players) {
             lobby.push(<ListGroup.Item key={p} active={this.props.player_name === this.props.players[p]}>
                 {this.props.players[p]}
             </ListGroup.Item>)
         }
-        return lobby
+        return lobby;
     }
 
     hints() {
         let hints = []
+        let counter = -1;
         hints.push(<Col key={"players"}>
                 {this.props.players.map((p) => {
-                    return (<ListGroup.Item key={p}>
+                    counter += 1;
+                    return (<ListGroup.Item key={p}variant={this.props.round % this.props.players.length === counter ? "secondary" : ""}>
                         {titleCase(p)}
                     </ListGroup.Item>);
                 })}
             </Col>);
+        hints.push(<br key={"break"}/>);
         hints.push(<Col key="board+role">
             <Row>
                 <Table bordered striped>
@@ -153,7 +188,7 @@ class Game extends Component {
             </Row>
                 <Alert variant="info">
                     {this.props.role ?
-                        "Secret Word: "+ titleCase(this.props.role)
+                        "Secret Word: " + titleCase(this.props.role)
                     :
                         "You are the Chameleon!"
                     }
@@ -180,6 +215,45 @@ class Game extends Component {
             rows.push(row)
         }
         return rows;
+    }
+
+    voting() {
+        let voting = [];
+        if (this.props.voting.voters.includes(this.props.player_name)) {
+            voting.push(<Alert variant={"info"} key="vote cast">
+                {"Your vote has been counted."}
+            </Alert>);
+        } else {
+            for (let p in this.props.players) {
+                voting.push(<ListGroup.Item key={p} id={p} onClick={() => {
+                    firestore.collection("sessions").doc(this.props.session.db_id).update({
+                        "round.voting": firebase.firestore.FieldValue.arrayUnion(this.props.player_name+"|"+this.props.players[p]),
+                    })
+                }}>
+                    {this.props.players[p]}
+                </ListGroup.Item>)
+            }
+        }
+        return voting;
+    }
+
+    results() {
+        let results = [];
+        let counts = {};
+        for (let v in this.props.voting.votes) {
+            if (this.props.voting.votes[v] in counts) {
+                counts[this.props.voting.votes[v]] += 1;
+            } else {
+                counts[this.props.voting.votes[v]] = 1;
+            }
+        }
+        for (let c in Object.keys(counts)) {
+            c = Object.keys(counts)[c];
+            results.push(<ListGroup.Item key={c} id={c}>
+                {c+": "+counts[c]}
+            </ListGroup.Item>)
+        }
+        return results;
     }
 
     render() {
@@ -209,7 +283,8 @@ const mapStateToProps = state => ({
     topics: state.topics,
     topic: state.round.topic,
     role: state.round.role,
-    round: state.round.id
+    round: state.round.id,
+    voting: state.voting,
 });
 
 const mapDispatchToProps = dispatch => ({

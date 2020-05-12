@@ -25,13 +25,19 @@ class Join extends Component {
             if (this.state.session_key) {
                 firestore.collection("sessions").where("key", "==", this.state.session_key).get().then(resp => {
                     if (resp.docs.length === 1) {
-                        firestore.collection("sessions").doc(resp.docs[0].id).update({
-                            players: firebase.firestore.FieldValue.arrayUnion(this.state.player_name)
-                        })
-                        this.props.setSession(resp.docs[0].data().key, resp.docs[0].id);
-                        this.props.setPlayer(this.state.player_name);
-                        cookie.save("session", {key: resp.docs[0].data().key, db_id: resp.docs[0].id})
-                        cookie.save("player", this.state.player_name)
+                        if (resp.docs[0].data().stage !== "lobby") {
+                            this.setState({error_message: "Please wait for the current round to finish before attempting to join."})
+                        } else if (resp.docs[0].data().players.includes(this.state.player_name)) {
+                            this.setState({error_message: "Player name is unavaliable."})
+                        } else {
+                            firestore.collection("sessions").doc(resp.docs[0].id).update({
+                                players: firebase.firestore.FieldValue.arrayUnion(this.state.player_name)
+                            })
+                            this.props.setSession(resp.docs[0].data().key, resp.docs[0].id);
+                            this.props.setPlayer(this.state.player_name);
+                            cookie.save("session", {key: resp.docs[0].data().key, db_id: resp.docs[0].id})
+                            cookie.save("player", this.state.player_name)
+                        }
                     } else {
                         this.setState({error_message: "Session key does not exist."})
                     }

@@ -23,7 +23,7 @@ class Join extends Component {
     joinGame() {
         if (this.state.player_name) {
             if (this.state.session_key) {
-                firestore.collection("sessions").where("key", "==", this.state.session_key).get().then(resp => {
+                firestore.collection("sessions").where("key", "==", this.state.session_key.toUpperCase()).get().then(resp => {
                     if (resp.docs.length === 1) {
                         if (resp.docs[0].data().stage !== "lobby") {
                             this.setState({error_message: "Please wait for the current round to finish before attempting to join."})

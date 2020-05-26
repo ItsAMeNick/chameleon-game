@@ -89,7 +89,13 @@ class Game extends Component {
                     </Row>)
                 } else {
                     return (<Button onClick={() => {
-                        console.log("LEAVE GAME")
+                        firestore.collection("sessions").doc(this.props.session.db_id).update({
+                            players: firebase.firestore.FieldValue.arrayRemove(this.props.player_name),
+                        }).then(() => {
+                            cookie.remove("player");
+                            cookie.remove("session");
+                            this.props.clearGame();
+                        })
                     }}>
                         Leave Game
                     </Button>)
@@ -253,6 +259,13 @@ class Game extends Component {
                 {c+": "+counts[c]}
             </ListGroup.Item>)
         }
+        results.push(<br/>);
+        results.push(<Table bordered striped>
+            <tbody>
+                {this.genBoard()}
+            </tbody>
+        </Table>);
+
         return results;
     }
 

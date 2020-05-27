@@ -19,7 +19,7 @@ class LoadTopics extends Component {
         // if (cookie.load("db_update") === today.toISOString().split("T")[0]) {
         //     console.log("Cached Topics")
         //     this.setState({loaded: 100})
-        //     cookie.save("db_update", today.toISOString().split("T")[0], {path: "/"})
+        //     cookie.save("chameleon_db_update", today.toISOString().split("T")[0], {path: "/"})
         //     console.log(cookie.load("topics"))
         //     this.props.setTopics(cookie.load("topics"))
         // } else {
@@ -31,8 +31,8 @@ class LoadTopics extends Component {
         //             topics[data.topic] = data.words
         //         }
         //         this.setState({loaded: 100})
-        //         cookie.save("db_update", today.toISOString().split("T")[0], {path: "/"})
-        //         cookie.save("topics", topics, {path: "/"});
+        //         cookie.save("chameleon_db_update", today.toISOString().split("T")[0], {path: "/"})
+        //         cookie.save("chameleon_topics", topics, {path: "/"});
         //         this.props.setTopics(topics)
         //     });
         // }
@@ -43,8 +43,6 @@ class LoadTopics extends Component {
                 topics[data.topic] = data.words
             }
             this.setState({loaded: 100})
-            cookie.save("db_update", today.toISOString().split("T")[0], {path: "/"})
-            cookie.save("topics", topics, {path: "/"});
             this.props.setTopics(topics)
         });
     }

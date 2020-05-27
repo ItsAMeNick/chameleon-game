@@ -36,8 +36,8 @@ class Host extends Component {
             }).then(ref => {
                 this.props.setSession(key, ref.id)
                 this.props.setPlayer(this.state.player_name);
-                cookie.save("session", {key: key, db_id: ref.id})
-                cookie.save("player", this.state.player_name)
+                cookie.save("chameleon_session", {key: key, db_id: ref.id})
+                cookie.save("chameleon_player", this.state.player_name)
             })
         } else {
             this.setState({error_message: "Enter a Name!"})
